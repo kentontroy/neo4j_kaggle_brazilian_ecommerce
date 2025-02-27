@@ -3,6 +3,6 @@
 ```
 If using Docker to host Neo4J:
 
-mkdir graph_plugins
-mkdir graph_data
+mkdir docker/graph_plugins
+mkdir docker/graph_data
 ```
