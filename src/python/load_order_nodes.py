@@ -10,37 +10,31 @@ URI = os.getenv("NEO4J_URI")
 USERNAME = os.getenv("NEO4J_USERNAME")
 PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-order_id: $order_id,
-customer_id
-order_status
-order_purchase_timestamp
-order_approved_at,
-order_delivered_carrier_date
-order_delivered_customer_date
-order_estimated_delivery_date
-
-def load_customer_nodes(tx, row)->None:
+def load_order_nodes(tx, row)->None:
     cypher = """
-        MERGE (o:Order
-        { customer_id: $customer_id, 
-          customer_unique_id: $customer_unique_id, 
-          customer_zip_code_prefix: $customer_zip_code_prefix,
-          customer_city: $customer_city,
-          customer_state: $customer_state })
+        MERGE (o:Order {
+            order_id: $order_id,
+            customer_id: $customer_id,
+            order_status: $order_status,
+            order_purchase_timestamp: $order_purchase_timestamp
+        })
         """
     result = tx.run(cypher, 
-        customer_id = row["customer_id"], 
-        customer_unique_id = row["customer_unique_id"], 
-        customer_zip_code_prefix = row["customer_zip_code_prefix"],
-        customer_city = row["customer_city"],
-        customer_state = row["customer_state"]
+        order_id = row["order_id"],
+        customer_id = row["customer_id"],
+        order_status = row["order_status"],
+        order_purchase_timestamp = row["order_purchase_timestamp"]
+        #   order_approved_at = row["order_approved_at"],
+        #   order_delivered_carrier_date = row["order_delivered_carrier_date"],
+        #   order_delivered_customer_date = row["order_delivered_customer_date"],
+        #   order_estimated_delivery_date = row["order_estimated_delivery_date"]
     )
     return result
 
 if __name__ == '__main__':
     with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
         with driver.session() as session:
-            df = pd.read_csv(CUSTOMER_FILE) 
+            df = pd.read_csv(ORDER_FILE) 
             for index, row in df.iterrows():
-                result = session.execute_write(load_customer_nodes, row)
+                result = session.execute_write(load_order_nodes, row)
                 logging.info(result)
