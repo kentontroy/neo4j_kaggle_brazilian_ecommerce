@@ -19,6 +19,12 @@ CUSTOMER_FILE_FILTERED = os.getenv("CUSTOMER_FILE_FILTERED")
 ORDER_FILE = os.getenv("ORDER_FILE")
 ORDER_FILE_FILTERED = os.getenv("ORDER_FILE_FILTERED")
 
+logging.basicConfig(
+    level=logging.INFO, 
+    format="%(asctime)s - %(levelname)s \n %(message)s" 
+)
+logger = logging.getLogger(__name__)
+
 def read_ids_from_file()->List[str]:
     ids = []
     with open(CUSTOMER_ID_FILE, "r") as f:

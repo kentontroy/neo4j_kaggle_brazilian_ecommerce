@@ -14,18 +14,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def create_customer_order_edges(tx):
+def create_order_product_edges(tx):
     cypher = """
-        MATCH (c:Customer), (o:Order)
-        WHERE c.customer_id = o.customer_id
-        MERGE (c)-[p:placed]->(o)
-        ON CREATE SET p.order_purchase_timestamp = o.order_purchase_timestamp
+        MATCH (o:Order), (i:OrderItem), (p:Product)
+        WHERE o.order_id = i.order_id AND i.product_id = p.product_id
+        MERGE (o)-[h:has_item]->(p)
+        ON CREATE SET h.price = i.price, h.freight_value = i.freight_value, 
+            h.seller_id = i.seller_id, h.order_id = o.order_id,
+            h.product_id = p.product_id
+        RETURN COUNT(h)
     """
     result = tx.run(cypher) 
+    logging.info(result)
     return result
 
 if __name__ == '__main__':
     with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
         with driver.session() as session:
-            result = session.execute_write(create_customer_order_edges)
-            logging.info(result)
+            _ = session.execute_write(create_order_product_edges)

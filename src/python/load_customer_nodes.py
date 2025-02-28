@@ -10,7 +10,13 @@ URI = os.getenv("NEO4J_URI")
 USERNAME = os.getenv("NEO4J_USERNAME")
 PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-def load_customer_nodes(tx, row)->None:
+logging.basicConfig(
+    level=logging.INFO, 
+    format="%(asctime)s - %(levelname)s \n %(message)s" 
+)
+logger = logging.getLogger(__name__)
+
+def load_customer_nodes(tx, row):
     cypher = """
         MERGE (c:Customer 
         { customer_id: $customer_id, 
@@ -26,6 +32,7 @@ def load_customer_nodes(tx, row)->None:
         customer_city = row["customer_city"],
         customer_state = row["customer_state"]
     )
+    logging.info(result)
     return result
 
 if __name__ == '__main__':
@@ -33,5 +40,4 @@ if __name__ == '__main__':
         with driver.session() as session:
             df = pd.read_csv(CUSTOMER_FILE) 
             for index, row in df.iterrows():
-                result = session.execute_write(load_customer_nodes, row)
-                logging.info(result)
+                _ = session.execute_write(load_customer_nodes, row)

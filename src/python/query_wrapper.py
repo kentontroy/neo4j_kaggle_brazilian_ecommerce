@@ -10,6 +10,10 @@ from typing import Dict, List
 # Load environment variables from .env file
 load_dotenv()
 
+URI = os.getenv("NEO4J_URI")
+USERNAME = os.getenv("NEO4J_USERNAME")
+PASSWORD = os.getenv("NEO4J_PASSWORD")
+
 logging.basicConfig(
     level=logging.INFO, 
     format="%(asctime)s - %(levelname)s \n %(message)s" 
@@ -24,7 +28,7 @@ PASSWORD=os.getenv("NEO4J_PASSWORD")
 def getSampleCustomerIds()->List[str]:
     customer_ids = []
     try:
-        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
+        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
             driver.verify_connectivity()
             drs = driver.session()
             res = drs.run(q_strings.GET_DEMO_CUSTOMER_IDS)
@@ -40,7 +44,7 @@ def getSampleCustomerIds()->List[str]:
 def getTierForCustomerId(customer_id: str)->str:
     tier = ""
     try:
-        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
+        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
             driver.verify_connectivity()
             drs = driver.session()
             res = drs.run(q_strings.GET_TIER, customer_id=customer_id)
@@ -57,7 +61,7 @@ def getTierForCustomerId(customer_id: str)->str:
 def getTiersForAllSampleCustomers()->Dict[str, str]:
     tiers = {}
     try:
-        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
+        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
             driver.verify_connectivity()
             drs = driver.session()
             res = drs.run(q_strings.GET_TIERS_FOR_ALL_SAMPLE)
@@ -73,7 +77,7 @@ def getTiersForAllSampleCustomers()->Dict[str, str]:
 def getPromotionsForAllTiers()->Dict[str, str]:
     promotions = {}
     try:
-        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD), encrypted=True) as driver:
+        with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
             driver.verify_connectivity()
             drs = driver.session()
             res = drs.run(q_strings.GET_PROMOTIONS_FOR_ALL_TIERS)
@@ -111,9 +115,9 @@ if __name__ == "__main__":
     tiers = getTiersForAllSampleCustomers()
     logger.info(tiers)
 
-    promotions = getPromotionsForAllTiers()
-    logger.info(promotions)
+#    promotions = getPromotionsForAllTiers()
+#    logger.info(promotions)
 
-    promotions = getPromotionsForCustomerId(random.choice(customer_ids))
-    logger.info(promotions)
+#    promotions = getPromotionsForCustomerId(random.choice(customer_ids))
+#    logger.info(promotions)
 
