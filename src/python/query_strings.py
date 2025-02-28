@@ -3,6 +3,7 @@ GET_DEMO_CUSTOMER_IDS="MATCH (c:Customer) RETURN c.customer_id AS id"
 
 GET_TIER="""
 MATCH (c:Customer)-[:placed]->(o)-[r:has_item]->(p:Product), (l:LifetimeRewardsVariable)
+WHERE c.customer_id = $customer_id
 WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount, l
 RETURN
 customer_id,
@@ -15,8 +16,7 @@ END AS tier
 """
 
 GET_TIERS_FOR_ALL_SAMPLE="""
-MATCH (c:Customer)-[:placed]->(o)-[r:has_item]->(p:Product), 
-    (l:LifetimeRewardsVariable)
+MATCH (c:Customer)-[:placed]->(o)-[r:has_item]->(p:Product), (l:LifetimeRewardsVariable)
 WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount, l
 RETURN
 customer_id,
