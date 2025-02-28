@@ -46,7 +46,7 @@ cd ${PROJECT_ROOT}/src/python
 Create a random sample of customers (in this case, 50)
 python3 randomly_sample_customers.py --sample-size 50
 
-Filter the data sets to only load Order data specific to those customers
+Filter the data sets to only load Order data specific to the customers sampled
 python3 filter_by_customer.py
 
 Load the data set nodes (i.e. vertices)
