@@ -16,13 +16,12 @@ logger = logging.getLogger(__name__)
 
 def load_lifetime_rewards_node(tx):
     cypher = """
-        MATCH (o:Order)-[r:has_item]->(p:Product)
-        WITH o.order_id AS order_id, ROUND(SUM(r.price) * 100) / 100 AS purchase_amount
+        MATCH (c:Customer)-[:placed]->(o:Order)-[r:has_item]->(p:Product)
+        WITH c.customer_id AS customer_id, ROUND(SUM(r.price) * 100) / 100 as purchase_amount
         WITH AVG(purchase_amount) AS avg_purchase_amount, STDEVP(purchase_amount) AS stddev_purchase_amount
 
         MERGE (l:LifetimeRewardsVariable)
         SET l.average_purchase_amount = avg_purchase_amount, l.stddev_purchase_amount = stddev_purchase_amount
-        RETURN l
     """
     result = tx.run(cypher)
     logging.info(result)
