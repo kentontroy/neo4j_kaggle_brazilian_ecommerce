@@ -74,4 +74,6 @@ Experiment with Cypher queries
 python3 query_wrapper.py
 ```
 
+![Neo4j](./images/neo4j_database_example.png)
+
 
