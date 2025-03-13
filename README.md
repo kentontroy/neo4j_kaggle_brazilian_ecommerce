@@ -2,6 +2,11 @@
 
 ![Neo4j](./images/neo4j.png)
 
+Clone the git repo
+```
+git clone https://github.com/kentontroy/neo4j_kaggle_brazilian_ecommerce.git
+```
+
 If using Docker to host Neo4J
 ```
 Initial image download and how to run:
@@ -27,7 +32,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 pyenv install 3.11.9
-pyenv virtualenv 3.10.14 venv
+pyenv virtualenv 3.11.9 venv
 ```
 
 Prepare the environment
