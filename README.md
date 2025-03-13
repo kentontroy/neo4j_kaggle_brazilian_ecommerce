@@ -18,7 +18,7 @@ docker-compose up -d
 docker exec -it docker-demo_neo4j-1 bash
 ```
 
-Create a python virtual environment
+Optionally create a python virtual environment (highly recommended)
 ```
 python3 -m pip install --upgrade pip
 
