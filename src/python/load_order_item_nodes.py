@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from neo4j import GraphDatabase
 
 load_dotenv()
-ORDER_ITEM_FILE = os.getenv("ORDER_ITEM_FILE")
+ORDER_ITEM_FILE = os.getenv("ORDER_ITEM_FILE_FILTERED")
 URI = os.getenv("NEO4J_URI")
 USERNAME = os.getenv("NEO4J_USERNAME")
 PASSWORD = os.getenv("NEO4J_PASSWORD")
