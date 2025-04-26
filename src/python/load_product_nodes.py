@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from neo4j import GraphDatabase
 
 load_dotenv()
-PRODUCT_FILE = os.getenv("PRODUCT_FILE")
+PRODUCT_FILE_FILTERED = os.getenv("PRODUCT_FILE_FILTERED")
 URI = os.getenv("NEO4J_URI")
 USERNAME = os.getenv("NEO4J_USERNAME")
 PASSWORD = os.getenv("NEO4J_PASSWORD")
@@ -42,6 +42,6 @@ def load_product_nodes(tx, row):
 if __name__ == '__main__':
     with GraphDatabase.driver(URI, auth=(USERNAME, PASSWORD)) as driver:
         with driver.session() as session:
-            df = pd.read_csv(PRODUCT_FILE) 
+            df = pd.read_csv(PRODUCT_FILE_FILTERED) 
             for index, row in df.iterrows():
                 _ = session.execute_write(load_product_nodes, row)
